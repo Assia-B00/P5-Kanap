@@ -3,19 +3,21 @@ fetch("http://localhost:3000/api/products")
         if (response.ok) {
             return response.json();
         }
-    }).then(function (products) {        
+    })
+    .then(function (products) {        
         for (let product of products) {
+            
             // Call API
             const href = "./product.html?id=" + product["_id"];
 
-            // anchor
+            // Anchor
             let a = document.createElement("a");
             a.setAttribute("href", href)
 
             // Article
             let article = document.createElement("article")
 
-            // image
+            // Image
             let img = document.createElement("img")
             img.setAttribute("src", product["imageUrl"])
             img.setAttribute("alt", product["altTxt"])
