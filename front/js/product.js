@@ -30,5 +30,21 @@ fetch("http://localhost:3000/api/products/" + product_id)
             option.innerHTML = color
             document.getElementById("colors").appendChild(option)
         }
-        document.getElementById("items").appendChild(article)
     })
+
+    const addToCart = document.querySelector("#addToCart")
+    addToCart.addEventListener("click", function(){
+        //TODO: Vérifier les données (quantié et couleur) 
+        const quantity = document.querySelector("#quantity").value
+        const color = document.querySelector("#colors").value
+        // product_id
+        console.log(quantity)
+        console.log(color)
+        console.log(product_id)
+        add_to_cart(product_id, quantity, color)
+    })
+    
+
+    //localStorage.setItem("cart", product["name"])
+
+    // quand on clique sur "ajouter au panier, cea doit faire l'action"
