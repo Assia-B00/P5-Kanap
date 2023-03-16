@@ -37,14 +37,13 @@ fetch("http://localhost:3000/api/products/" + product_id)
         //TODO: Vérifier les données (quantié et couleur) 
         const quantity = document.querySelector("#quantity").value
         const color = document.querySelector("#colors").value
+        const price = document.querySelector("#price").value
         // product_id
         console.log(quantity)
         console.log(color)
+        console.log(price)
         console.log(product_id)
-        add_to_cart(product_id, quantity, color)
+
     })
     
 
-    //localStorage.setItem("cart", product["name"])
-
-    // quand on clique sur "ajouter au panier, cea doit faire l'action"
