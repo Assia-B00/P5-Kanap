@@ -1,24 +1,35 @@
-//const addToCart = document.querySelector("#addToCart")
+function addToCart(product_id, color, quantity) {
+    let data = { "id": product_id, "color": color, "quantity": quantity }
+    let cart = JSON.parse(localStorage.getItem('cartProduct'));
+    //let cart = [];
+    if (!cart) {
+        cart = [];
+        cart.push(data);
+        localStorage.setItem('cartProduct', JSON.stringify(cart));
+        console.log("INIT CART")
+        return
+    }
 
-// On déclare la variable dans laquelle on met les key et les value du localstorage
-let cart = localStorage.getItem('cartProduct');
-console.log(cart)
+    // S'il y a dèjà des produits enregistrés dans le localstorage
+    let to_add = true
+    console.log(cart)
+    for (let i = 0 ; i <  cart.length ; i ++) {
+        console.log(cart[i]['id'])
+        if (cart[i]['id'] == product_id && cart[i]['color'] == color) {
+            cart[i]['quantity'] = parseInt(cart[i]['quantity']) + parseInt(quantity)
+            to_add = false
+            break
+        }         
+    }
+    if(to_add){
+        cart.push(data);        
+    }
 
-// S'il y a dèjà des produits enregistrés dans le localstorage
-if (cart) {
-    cart.push(addToCart);
-    localStorage.setItem('cartProduct', (cart));
-}
-// S'il n'y a pas de produits enregistrés dans le localstorage
-else {
-    cart = [];
-    cart.push(addToCart);
-    localStorage.setItem('cartProduct', (cart));
+    localStorage.setItem('cartProduct', JSON.stringify(cart));
     console.log(cart)
 }
 
-
-function get_cart() {
+/*function get_cart() {
     let cart = localStorage.getItem('cart');
     console.log(cart)
 }
@@ -50,4 +61,4 @@ for (let product in cart) {
         option.innerHTML = color
         document.getElementById("colors").appendChild(option)
     }
-}
+}*/
