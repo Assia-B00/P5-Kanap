@@ -34,50 +34,86 @@ function addToCart(product_id, color, quantity) {
 // Appel au fetch pour récupréer les données du produit
 // Affiche les données
 
-fetch("http://localhost:3000/api/products" + cartProductLocalStorage[i].id)
-    .then(function (response) {
-        if (response.ok) {
-            return response.json();
-        }
-    })
-    .then(function (cart) {
-        for (let product in cart) {
+function get_cart(cartProductLocalStorage) {
 
-            // Pour séléctionner la class où j'injecte le code HTML
-            //const list = document.querySelector('cart__item');
-            //console.log("je suis là" + list);
+    fetch("http://localhost:3000/api/products" + cartProductLocalStorage[i]._id)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(function (cart) {
+            for (let product in cart) {
 
-           // listProduct.innerHTML = '${cart.imageURL} ${cart.name} ${cart.color} ${cart.price}€ ${cart.quantity}';
-           
-           let article = document.createElement (article)
-           
-           let img = document.createElement("img")
-           img.setAttribute("src", product["imageUrl"])
-           img.setAttribute("alt", product["altTxt"])
-           img.classList.add(cart__item__img)
-           article.appendChild(img)
+                // Pour séléctionner la class où j'injecte le code HTML
+                //const list = document.querySelector('.cart__item');
+                //console.log("je suis là" + list);
 
-           let h2 = document.createElement("div")
-           h2.classList.add("cart__item__content__description")
-           hh2.innerHTML = cart[product].name;
-           article.appendChild(h2)
+                // listProduct.innerHTML = '${cart.imageURL} ${cart.name} ${cart.color} ${cart.price}€ ${cart.quantity}';
 
-           let color = document.createElement("div")
-           color.classList.add("cart__item__content__description")
-           color.innerHTML = cart[product].color;
-           article.appendChild(color)
+                let article = document.createElement(article)
 
-           let p = document.createElement("div")
-           p.classList.add("cart__item__content__description")
-           p.innerHTML = cart[product].price;
-           article.appendChild(p)
+                let img = document.createElement("img")
+                img.setAttribute("src", product["imageUrl"])
+                img.setAttribute("alt", product["altTxt"])
+                img.classList.add(cart__item__img)
+                article.appendChild(img)
 
-           let quantity = document.createElement("input")
-           quantity.classList.add("itemQuantity")
-           quantity.innerHTML = cart[product].quantity;
-           article.appendChild(quantity)
-        }
-    })
+                let h2 = document.createElement("div")
+                h2.classList.add("cart__item__content__description")
+                h2.innerHTML = cart[product].name;
+                article.appendChild(h2)
+
+                let color = document.createElement("div")
+                color.classList.add("cart__item__content__description")
+                color.innerHTML = cart[product].color;
+                article.appendChild(color)
+
+                let p = document.createElement("div")
+                p.classList.add("cart__item__content__description")
+                p.innerHTML = cart[product].price;
+                article.appendChild(p)
+
+                let quantity = document.createElement("input")
+                quantity.classList.add("itemQuantity")
+                quantity.innerHTML = cart[product].quantity;
+                article.appendChild(quantity)
+            }
+        })
+
+}
+
+// Pour modifier la quantité sur la page : 
+function modifQuantity() {
+    var inputQuantity = document.getElementsByClassName(".itemQuantity").value
+    alert(inputQuantity);
+}
+
+// Pour suprimer un article : 
+let deleteProducts = document.querySelectorAll(".deleteItem")
+for (let j = 0; j < deleteProducts.length; j++) {
+    deleteProducts.addEventListener("click");
+    let theProductDelete = cart[j]._id;
+    cart = cart.filter(products => products._id !== _id);
+    localStorage.setItem ("cartProduct", JSON.stringify(cart));
+}
+// Pour afficher le total prix du panier : 
+function totalPriceInCart() {
+    let total = []
+
+    // Aller chercher les prix dans le panier 
+    let productPriceQuantity = document.querySelectorAll("#totalPrice")
+    for (let price in productPriceQuantity) {
+        total.push(productPriceQuantity[price].innerHTML)
+        console.log(total)
+    }
+
+    // Pour additionner les prix avec méthode reducer : 
+    const reducer = (accumulator, currentValue) => accumulator + currentValue
+    const totPrice = total.reduce(reducer, 0)
+
+}
+
 
 /* const cart = []
  const  = document.createElement(article);
