@@ -36,51 +36,58 @@ function addToCart(product_id, color, quantity) {
 
 function get_cart(cartProductLocalStorage) {
 
-    fetch("http://localhost:3000/api/products" + cartProductLocalStorage[i]._id)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            }
-        })
-        .then(function (cart) {
-            for (let product in cart) {
+    // Si le panier est vide : 
+    if (cart === null) {
+    } else {
+        // Si le panier n'est pas vide : afficher les produits du local storage
 
-                // Pour séléctionner la class où j'injecte le code HTML
-                //const list = document.querySelector('.cart__item');
-                //console.log("je suis là" + list);
+        fetch("http://localhost:3000/api/products" + cartProductLocalStorage[i]._id)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+            })
+            .then(function (cart) {
+                for (let product in cart) {
 
-                // listProduct.innerHTML = '${cart.imageURL} ${cart.name} ${cart.color} ${cart.price}€ ${cart.quantity}';
+                    // Pour séléctionner la class où j'injecte le code HTML
+                    //const list = document.querySelector('.cart__item');
+                    //console.log("je suis là" + list);
 
-                let article = document.createElement(article)
+                    // listProduct.innerHTML = '${cart.imageURL} ${cart.name} ${cart.color} ${cart.price}€ ${cart.quantity}';
 
-                let img = document.createElement("img")
-                img.setAttribute("src", product["imageUrl"])
-                img.setAttribute("alt", product["altTxt"])
-                img.classList.add(cart__item__img)
-                article.appendChild(img)
+                    let seeCart = document.createElement("article")
 
-                let h2 = document.createElement("div")
-                h2.classList.add("cart__item__content__description")
-                h2.innerHTML = cart[product].name;
-                article.appendChild(h2)
+                    let img = document.createElement("img")
+                    img.setAttribute("src", product["imageUrl"])
+                    img.setAttribute("alt", product["altTxt"])
+                    //img.classList.add("cart__item__img")
+                    document.getElementsByClassName("cart__item__img")[0].appendChild(img)
+                    article.appendChild(img)
 
-                let color = document.createElement("div")
-                color.classList.add("cart__item__content__description")
-                color.innerHTML = cart[product].color;
-                article.appendChild(color)
+                    let h2 = document.createElement("div")
+                    h2.classList.add("cart__item__content__description")
+                    h2.innerHTML = cart[product].name;
+                    article.appendChild(h2)
 
-                let p = document.createElement("div")
-                p.classList.add("cart__item__content__description")
-                p.innerHTML = cart[product].price;
-                article.appendChild(p)
+                    let color = document.createElement("div")
+                    color.classList.add("cart__item__content__description")
+                    color.innerHTML = cart[product].color;
+                    article.appendChild(color)
 
-                let quantity = document.createElement("input")
-                quantity.classList.add("itemQuantity")
-                quantity.innerHTML = cart[product].quantity;
-                article.appendChild(quantity)
-            }
-        })
+                    let p = document.createElement("div")
+                    p.classList.add("cart__item__content__description")
+                    p.innerHTML = cart[product].price;
+                    article.appendChild(p)
 
+                    let quantity = document.createElement("input")
+                    quantity.classList.add("itemQuantity")
+                    quantity.innerHTML = cart[product].quantity;
+                    article.appendChild(quantity)
+                }
+            })
+
+    }
 }
 
 // Pour modifier la quantité sur la page : 
@@ -95,7 +102,7 @@ for (let j = 0; j < deleteProducts.length; j++) {
     deleteProducts.addEventListener("click");
     let theProductDelete = cart[j]._id;
     cart = cart.filter(products => products._id !== _id);
-    localStorage.setItem ("cartProduct", JSON.stringify(cart));
+    localStorage.setItem("cartProduct", JSON.stringify(cart));
 }
 // Pour afficher le total prix du panier : 
 function totalPriceInCart() {
