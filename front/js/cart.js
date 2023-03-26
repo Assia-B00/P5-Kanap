@@ -147,13 +147,66 @@ function get_cart() {
     }
 }
 
-// Pour modifier la quantité d'un produit sur la page panier : 
-function modifQuantity() {
-    var inputQuantity = document.getElementsByClassName(".itemQuantity").value
-    alert(inputQuantity);
+// Pour modifier la quantité d'un produit sur la page panier (méthode -> addEventListener de type change) :
+
+let inputQuantity = document.querySelector(".itemQuantity")
+for (let j = 0; j < inputQuantity.length; j++) {
+
+    inputQuantity.addEventListener("change", function () {
+        let newQuantity = parseInt(this.value)
+        let closest = this.closest("[data-id][data-color]")
+        const id = closest.getAttribute("data-id")
+        const color = closest.getAttribute("data-color")
+
+        if (inputQuantity[j].value !== null && 0 < inputQuantity[j].value && inputQuantity[j].value < 101) {
+            console.log ()
+
+        } else {
+            alert("Veuillez choisir une quantité entre 1 et 100")
+            inputQuantity[j].value = 1
+            return
+        }
+
+        let cart = JSON.parse(localStorage.getItem('cartProduct'))
+        for (let l = 0; l < cart.length; l++) {
+            if (
+                cart[l].id === id &&
+                cart[l].color === color
+            ) {
+                cart[l].quantity = newQuantity
+                localStorage.setItem('cartProduct', JSON.stringify(cart))
+                break
+            }
+        }
+    })
+
 }
 
-// Pour supprimer un article sur la page panier : 
+// Pour supprimer un article sur la page panier :
+
+let deleteProducts = document.querySelectorAll(".deleteItem")
+for (let k = 0; k < deleteProducts.length; k++) {
+    deleteProducts[k].addEventListener("click", function () {
+        let closest = this.closest("[data-id][data-color]")
+        const id = closest.getAttribute("data-id")
+        const color = closest.getAttribute("data-color")
+        closest.remove()
+        let cart = JSON.parse(localStorage.getItem('cartProduct'))
+        for (let m = 0; m < cart.length; m++) {
+            if (
+                cart[m].id === id &&
+                cart[m].color === color
+            ) {
+                cart.splice(m, 1)
+                localStorage.setItem('cartProduct', JSON.stringify(cart))
+                break
+            }
+        }
+    })
+}
+
+/*
+// Pour supprimer un article sur la page panier :
 let deleteProducts = document.querySelectorAll(".deleteItem")
 console.log(deleteProducts);
 
@@ -163,9 +216,49 @@ for (let j = 0; j < deleteProducts.length; j++) {
         console.log(event)
 
         let theProductDelete = cart[j].id;
-        // Avec la méthode filter, on séléctonne les éléments à garder et on supprime 
+        // Avec la méthode filter, on séléctonne les éléments à garder et on supprime
         cart = cart.filter(el => el.id !== theProductDelete);
         console.log(cart)
         localStorage.setItem("cartProduct", JSON.stringify(cart));
     });
+}*/
+
+// Formulaire : 
+
+/*function formulaire() {
+    const order = document.querySelector("#order")
+
+    let inputFisrtname = document.querySelector("#firstName")
+    let errorFirstName = document.querySelector("#firstNameErrorMsg")
+
+    let inputLastname = document.querySelector("#lastName")
+
+    let inputAddress = document.querySelector("#address")
+
+    let inputCity = document.querySelector("#city")
+
+    let inputEmail = document.querySelector("#email")
+
+
+    order.addEventListener("click", (e) => {
+        if
+            (isNaN(inputFisrtname.value)) {
+            errorFirstName.innerText = "Vous devez renseigner un prénom"
+
+        }
+    })
 }
+
+
+
+/*
+// Si le formulaire est valide : 
+let cart = JSON.parse(localStorage.getItem('cartProduct'));
+let commandProduct = []
+commandProduct.push(cart)
+
+    localStorage.setItem("firstName",document.querySelector("#firstName").value)
+    localStorage.setItem("lastName",document.querySelector("#lastName").value)
+    localStorage.setItem("address",document.querySelector("#address").value)
+    localStorage.setItem("city",document.querySelector("#city").value)
+    localStorage.setItem("email",document.querySelector("#email").value)*/
