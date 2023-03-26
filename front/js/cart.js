@@ -159,7 +159,7 @@ for (let j = 0; j < inputQuantity.length; j++) {
         const color = closest.getAttribute("data-color")
 
         if (inputQuantity[j].value !== null && 0 < inputQuantity[j].value && inputQuantity[j].value < 101) {
-            console.log ()
+            console.log (inputQuantity)
 
         } else {
             alert("Veuillez choisir une quantité entre 1 et 100")
