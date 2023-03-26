@@ -147,96 +147,25 @@ function get_cart() {
     }
 }
 
-// Pour modifier la quantité sur la page : 
+// Pour modifier la quantité d'un produit sur la page panier : 
 function modifQuantity() {
     var inputQuantity = document.getElementsByClassName(".itemQuantity").value
     alert(inputQuantity);
 }
 
-// Pour suprimer un article : 
+// Pour supprimer un article sur la page panier : 
 let deleteProducts = document.querySelectorAll(".deleteItem")
-console.log(deleteProducts)
+console.log(deleteProducts);
+
 for (let j = 0; j < deleteProducts.length; j++) {
-    deleteProducts.addEventListener("click", (event) => {
+    deleteProducts[j].addEventListener("click", (event) =>{
         event.preventDefault();
+        console.log(event)
+
         let theProductDelete = cart[j].id;
-        console.log("theProductDelete")
-        console.log(theProductDelete)
-        cart = cart.filter(products => products.id !== _id);
+        // Avec la méthode filter, on séléctonne les éléments à garder et on supprime 
+        cart = cart.filter(el => el.id !== theProductDelete);
+        console.log(cart)
         localStorage.setItem("cartProduct", JSON.stringify(cart));
     });
 }
-/*// Pour afficher le total prix du panier : 
-function totalPriceInCart() {
-    let total = []
-
-    // Aller chercher les prix dans le panier 
-    let productPriceQuantity = document.querySelectorAll("#totalPrice")
-    for (let price in productPriceQuantity) {
-        total.push(productPriceQuantity[price].innerHTML)
-        console.log(total)
-    }
-
-    // Pour additionner les prix avec méthode reducer : 
-    const reducer = (accumulator, currentValue) => accumulator + currentValue
-    const totPrice = total.reduce(reducer, 0)
-
-}
-
-
-/* const cart = []
- const  = document.createElement(article);
-
-
-     let listProduct = document.createElement(article);
-     listProduct.innerText = '${product.name} ${product.color} ${product.price}€ ${product.quantity}';
-     console.log(product.name)
- }*/
-
-
-/*let productList = [];
-for (let k = 0; k < cart.length; k++) {
-    productList = productList + '${product.name} ${product.color} ${product.price}€ ${product.quantity}';
-}
-})
-
-/*data.article.forEach(article=>{
-        const list = document.createElement(li);
-        li.innerHTML = "${product.imageUrl} ${product.name} ${product.price}" ;
-    })
-
-
-/*for (let product in cart) {
-    let productImg = document.createElement("img")
-    productImg.setAttribute("src", product["imageUrl"])
-    productImg.setAttribute("alt", product["altTxt"])
-    document.getElementsByClassName("cart__item__img")[0].appendChild(img)
-}
-console.log(product)
-/*
-    // Image
-    let img = document.createElement("img")
-    img.setAttribute("src", product["imageUrl"]) // fetch
-    img.setAttribute("alt", product["altTxt"]) // fecth
-    document.getElementsByClassName("cart__item__img")[0].appendChild(img)
-
-    // Title
-    document.getElementById("title").innerHTML = product["name"] //fetch
-
-    // Price
-    document.getElementById("price").innerHTML = product["price"] // fetch
-
-    // Description
-    document.getElementById("description").innerHTML = product["description"] //fetch
-
-    // Colors fetch
-    // quantité qui viens de cart
-
-    for (let color of product["colors"]) {
-        console.log(color)
-        let option = document.createElement("option")
-        option.setAttribute("value", color)
-        option.innerHTML = color
-        document.getElementById("colors").appendChild(option)
-    }
-}*/
