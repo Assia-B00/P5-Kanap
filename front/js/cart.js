@@ -186,6 +186,7 @@ for (let j = 0; j < inputQuantity.length; j++) {
 
 let deleteProducts = document.querySelectorAll(".deleteItem")
 for (let k = 0; k < deleteProducts.length; k++) {
+    
     deleteProducts[k].addEventListener("click", function () {
         let closest = this.closest("[data-id][data-color]")
         const id = closest.getAttribute("data-id")
