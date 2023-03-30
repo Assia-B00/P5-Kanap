@@ -51,15 +51,14 @@ function get_cart() {
             .then(function (product) {
 
                 let totalPrice = 0;
-                let article = document.getElementById("cart__items")
+                const section = document.querySelector("#cart__items")
 
                 // Pour afficher la balise <article> du code HTML : 
-                // <article class="cart__item" data-id="{product-ID}" data-color="{product-color} »>
                 let seeCart = document.createElement("article")
                 seeCart.classList.add("cart__item")
                 seeCart.setAttribute("data-id", product["_id"])
                 seeCart.setAttribute("data-color", cart[i]["color"])
-                //cart__items.appendChild(seeCart)
+                section.appendChild(seeCart)
 
                 // Pour afficher l'image du produit :
                 let div_img = document.createElement("div")
@@ -70,7 +69,7 @@ function get_cart() {
                 img.setAttribute("alt", product["altTxt"])
                 div_img.appendChild(img)
 
-                article.appendChild(div_img)
+                seeCart.appendChild(div_img)
 
                 //Pour afficher la <div class="cart__item__content"> :
                 let cart_content = document.createElement("div")
@@ -100,7 +99,7 @@ function get_cart() {
 
                 cart_content.appendChild(cartDescription)
 
-                article.appendChild(cart_content)
+                seeCart.appendChild(cart_content)
 
                 // Pour afficher la <div class="cart__item__content__settings">
                 let cartChoice = document.createElement("div")
@@ -160,7 +159,7 @@ for (let j = 0; j < inputQuantity.length; j++) {
 
     inputQuantity.addEventListener("change", function () {
         let newQuantity = parseInt(this.value)
-        let closest = this.closest("[data-id][data-color]")
+        let closest = this.closest(".cart__item")
         const id = closest.getAttribute("data-id")
         const color = closest.getAttribute("data-color")
 
@@ -191,7 +190,7 @@ for (let j = 0; j < inputQuantity.length; j++) {
 
 // Pour supprimer un article sur la page panier :
 
-let deleteProducts = document.querySelectorAll(".deleteItem")
+/*let deleteProducts = document.querySelectorAll(".deleteItem")
 for (let k = 0; k < deleteProducts.length; k++) {
 
     deleteProducts[k].addEventListener("click", function () {
@@ -211,7 +210,7 @@ for (let k = 0; k < deleteProducts.length; k++) {
             }
         }
     })
-}
+}*/
 /*
 // La fonction pour gérer la suppression 
 
@@ -224,7 +223,7 @@ function get_total_cart() {
 
     // Pour afficher le prix TOTAL du panier : 
     document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
-}
+}*/
 
 
 
