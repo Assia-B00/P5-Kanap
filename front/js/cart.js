@@ -54,10 +54,12 @@ function get_cart() {
                 let article = document.getElementById("cart__items")
 
                 // Pour afficher la balise <article> du code HTML : 
+                // <article class="cart__item" data-id="{product-ID}" data-color="{product-color} »>
                 let seeCart = document.createElement("article")
                 seeCart.classList.add("cart__item")
                 seeCart.setAttribute("data-id", product["_id"])
                 seeCart.setAttribute("data-color", cart[i]["color"])
+                //cart__items.appendChild(seeCart)
 
                 // Pour afficher l'image du produit :
                 let div_img = document.createElement("div")
@@ -119,6 +121,7 @@ function get_cart() {
                 inputQuantity.setAttribute("max", "100")
                 inputQuantity.setAttribute("value", cart[i].quantity)
                 inputQuantity.classList.add("itemQuantity")
+                //inputQuantity.addEventListener("click", inputQuantity)
 
                 // Pour afficher le bouton supprimer :
                 choiceQuantity.appendChild(inputQuantity)
@@ -131,9 +134,12 @@ function get_cart() {
                 pDelete.classList.add("deleteItem")
                 pDelete.innerHTML = "Supprimer"
                 btnDelete.appendChild(pDelete)
+                //pDelete.addEventListener("click", deleteProduct)
 
                 cartChoice.appendChild(btnDelete)
                 cart_content.appendChild(cartChoice)
+
+                // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction get_total_cart
 
                 // Pour afficher le nombre total d'articles :
                 document.getElementById("totalQuantity").innerHTML = cart.length
@@ -206,24 +212,50 @@ for (let k = 0; k < deleteProducts.length; k++) {
         }
     })
 }
-
 /*
-// Pour supprimer un article sur la page panier :
-let deleteProducts = document.querySelectorAll(".deleteItem")
-console.log(deleteProducts);
+// La fonction pour gérer la suppression 
 
-for (let j = 0; j < deleteProducts.length; j++) {
-    deleteProducts[j].addEventListener("click", (event) =>{
-        event.preventDefault();
-        console.log(event)
+function get_total_cart() {
 
-        let theProductDelete = cart[j].id;
-        // Avec la méthode filter, on séléctonne les éléments à garder et on supprime
-        cart = cart.filter(el => el.id !== theProductDelete);
-        console.log(cart)
-        localStorage.setItem("cartProduct", JSON.stringify(cart));
-    });
-}*/
+    let totalPrice = 0;    
+
+    // Pour afficher le nombre total d'articles :
+    document.getElementById("totalQuantity").innerHTML = cart.length
+
+    // Pour afficher le prix TOTAL du panier : 
+    document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
+}
+
+
+
+function deleteProduct() {
+
+    let ancestor = this.closest(".cart__item");
+    const id = ancestor.getAttribute("data-id");
+    const color = ancestor.getAttribute("data-color");
+    let cart = JSON.parse(localStorage.getItem('cartProduct'));
+
+    for (let index = 0; index < cart.length; index++) {
+        if (
+            cart[index].id === id &&
+            cart[index].color === color
+        ) {
+            cart.splice(index, 1);
+            localStorage.setItem('cartProduct', JSON.stringify(cart));
+            break;
+        }
+    }
+
+    // Le bloc est enlevé de l'affichage :
+
+    ancestor.remove();
+
+    // Recalcul du total du panier : 
+
+    display_total_cart();
+
+}
+
 
 // Formulaire : 
 
