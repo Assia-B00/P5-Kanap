@@ -50,7 +50,6 @@ function get_cart() {
             })
             .then(function (product) {
 
-                let totalPrice = 0;
                 const section = document.querySelector("#cart__items")
 
                 // Pour afficher la balise <article> du code HTML : 
@@ -93,8 +92,6 @@ function get_cart() {
                 let price = document.createElement("p")
                 price.innerHTML = parseFloat(product.price).toFixed(2) + " €"; // Pour avoir décimale (2 chiffres après la virgule)
 
-                totalPrice += product.price * cart[i].quantity
-
                 cartDescription.appendChild(price)
 
                 cart_content.appendChild(cartDescription)
@@ -120,7 +117,7 @@ function get_cart() {
                 inputQuantity.setAttribute("max", "100")
                 inputQuantity.setAttribute("value", cart[i].quantity)
                 inputQuantity.classList.add("itemQuantity")
-                //inputQuantity.addEventListener("click", inputQuantity)
+                inputQuantity.addEventListener("click", modifyQuantity)
 
                 // Pour afficher le bouton supprimer :
                 choiceQuantity.appendChild(inputQuantity)
@@ -133,100 +130,48 @@ function get_cart() {
                 pDelete.classList.add("deleteItem")
                 pDelete.innerHTML = "Supprimer"
                 btnDelete.appendChild(pDelete)
-                //pDelete.addEventListener("click", deleteProduct)
+                pDelete.addEventListener("click", deleteProduct)
 
                 cartChoice.appendChild(btnDelete)
                 cart_content.appendChild(cartChoice)
 
                 // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction get_total_cart
 
-                // Pour afficher le nombre total d'articles :
-                document.getElementById("totalQuantity").innerHTML = cart.length
-
-                // Pour afficher le prix TOTAL du panier : 
-                document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
-
 
             })
 
     }
+    display_total_cart()
 }
 
 // Pour modifier la quantité d'un produit sur la page panier (méthode -> addEventListener de type change) :
 
-let inputQuantity = document.querySelector(".itemQuantity")
-for (let j = 0; j < inputQuantity.length; j++) {
+function modifyQuantity() {
+    console.log("modifyQuantity")
+    console.log(this.value)
 
-    inputQuantity.addEventListener("change", function () {
-        let newQuantity = parseInt(this.value)
-        let closest = this.closest(".cart__item")
-        const id = closest.getAttribute("data-id")
-        const color = closest.getAttribute("data-color")
+    let newQuantity = parseInt(this.value)
+    let ancestor = this.closest(".cart__item");
+    const id = ancestor.getAttribute("data-id");
+    const color = ancestor.getAttribute("data-color");
+    let cart = JSON.parse(localStorage.getItem('cartProduct'));
 
-        if (inputQuantity[j].value !== null && 0 < inputQuantity[j].value && inputQuantity[j].value < 101) {
-            console.log(inputQuantity)
-
-        } else {
-            alert("Veuillez choisir une quantité entre 1 et 100")
-            inputQuantity[j].value = 1
-            return
+    for (let index = 0; index < cart.length; index++) {
+        if (
+            cart[index].id === id &&
+            cart[index].color === color
+        ) {
+            cart[index].quantity = newQuantity
+            localStorage.setItem('cartProduct', JSON.stringify(cart));
+            break;
         }
-
-        let cart = JSON.parse(localStorage.getItem('cartProduct'))
-        console.log(cart)
-        for (let l = 0; l < cart.length; l++) {
-            if (
-                cart[l].id === id &&
-                cart[l].color === color
-            ) {
-                cart[l].quantity = newQuantity
-                localStorage.setItem('cartProduct', JSON.stringify(cart))
-                break
-            }
-        }
-    })
+    }
+    display_total_cart()
 
 }
 
-// Pour supprimer un article sur la page panier :
 
-/*let deleteProducts = document.querySelectorAll(".deleteItem")
-for (let k = 0; k < deleteProducts.length; k++) {
-
-    deleteProducts[k].addEventListener("click", function () {
-        let closest = this.closest("[data-id][data-color]")
-        const id = closest.getAttribute("data-id")
-        const color = closest.getAttribute("data-color")
-        closest.remove()
-        let cart = JSON.parse(localStorage.getItem('cartProduct'))
-        for (let m = 0; m < cart.length; m++) {
-            if (
-                cart[m].id === id &&
-                cart[m].color === color
-            ) {
-                cart.splice(m, 1)
-                localStorage.setItem('cartProduct', JSON.stringify(cart))
-                break
-            }
-        }
-    })
-}*/
-/*
-// La fonction pour gérer la suppression 
-
-function get_total_cart() {
-
-    let totalPrice = 0;    
-
-    // Pour afficher le nombre total d'articles :
-    document.getElementById("totalQuantity").innerHTML = cart.length
-
-    // Pour afficher le prix TOTAL du panier : 
-    document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
-}*/
-
-
-
+// La fonction pour gérer la suppression :
 function deleteProduct() {
 
     let ancestor = this.closest(".cart__item");
@@ -255,10 +200,70 @@ function deleteProduct() {
 
 }
 
+function display_total_cart() {
+    let cart = JSON.parse(localStorage.getItem('cartProduct'));
+    // Si le panier est vide : 
 
-// Formulaire : 
+    if (cart === null) {
+        return
+    }
 
-/*function formulaire() {
+    // Si le panier n'est pas vide : afficher les produits du local storage
+    // Pour parcourir le panier, on fait une boucle for 
+    let totalPrice = 0;
+    for (let i = 0; i < cart.length; i++) {
+        fetch("http://localhost:3000/api/products/" + cart[i].id)
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+            })
+            .then(function (product) {
+
+
+                totalPrice += product.price * cart[i].quantity
+
+                // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction get_total_cart
+
+                // Pour afficher le nombre total d'articles :
+                document.getElementById("totalQuantity").innerHTML = cart.length
+
+                // Pour afficher le prix TOTAL du panier : 
+                document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
+
+
+            })
+
+    }
+}
+
+
+// Formulaire : on utilise les expressions régulières
+
+document.getElementById("order").addEventListener("click", function(e){
+    e.preventDefault()
+   formulaire()
+})
+
+/*function formulaire(){
+    console.log("formulaire")
+}
+
+/*
+let form = document.querySelector(".cart__order__form")
+
+// Email 
+
+form.firstName.addEventListener('change', function(){
+    validFirstName(this);
+})
+
+const validFirstName = function(inputFirstName){
+    let firstNameRegExp = new RegExp(^[A-Z]+[A-Za-z\é\è\ê\-]+$)
+    let errorFirstName =
+}*/
+
+function formulaire(event) {
     const order = document.querySelector("#order")
 
     let inputFisrtname = document.querySelector("#firstName")
@@ -272,16 +277,18 @@ function deleteProduct() {
 
     let inputEmail = document.querySelector("#email")
 
-
-    order.addEventListener("click", (e) => {
-        if
-            (isNaN(inputFisrtname.value)) {
-            errorFirstName.innerText = "Vous devez renseigner un prénom"
-
-        }
-    })
+    console.log(inputFisrtname.value.length)
+    if (inputFisrtname.value.length <= 1){
+        console.log("ERREUR")
+        errorFirstName.innerHTML = "Veuillez entrez un prénom valide"
+    }
+    return false
 }
 
+
+// Faire les regexp pour chaque champs
+// Créer un objet contact avec les données du formulaire et un tableaux produits
+// Générer un numéro de commande pour la page confirmation
 
 
 /*
