@@ -240,65 +240,123 @@ function display_total_cart() {
 
 // Formulaire : on utilise les expressions régulières
 
-document.getElementById("order").addEventListener("click", function(e){
+document.getElementById("order").addEventListener("click", function (e) {
     e.preventDefault()
-   formulaire()
+    formulaire()
 })
-
-/*function formulaire(){
-    console.log("formulaire")
-}
-
-/*
-let form = document.querySelector(".cart__order__form")
-
-// Email 
-
-form.firstName.addEventListener('change', function(){
-    validFirstName(this);
-})
-
-const validFirstName = function(inputFirstName){
-    let firstNameRegExp = new RegExp(^[A-Z]+[A-Za-z\é\è\ê\-]+$)
-    let errorFirstName =
-}*/
 
 function formulaire(event) {
     const order = document.querySelector("#order")
 
-    let inputFisrtname = document.querySelector("#firstName")
+    let inputFirstname = document.querySelector("#firstName")
     let errorFirstName = document.querySelector("#firstNameErrorMsg")
 
     let inputLastname = document.querySelector("#lastName")
+    let errorLastName = document.querySelector("#lastNameErrorMsg")
 
     let inputAddress = document.querySelector("#address")
+    let errorAddress = document.querySelector("#addressErrorMsg")
 
     let inputCity = document.querySelector("#city")
+    let errorCity = document.querySelector("#cityErrorMsg")
 
     let inputEmail = document.querySelector("#email")
+    let errorEmail = document.querySelector("#emailErrorMsg")
 
-    console.log(inputFisrtname.value.length)
-    if (inputFisrtname.value.length <= 1){
-        console.log("ERREUR")
-        errorFirstName.innerHTML = "Veuillez entrez un prénom valide"
+    // Message d'erreur Fristname
+
+    console.log(inputFirstname.value.length)
+    if (inputFirstname.value.length <= 1) {
+        console.log("ERREURfirstname")
+        errorFirstName.innerHTML = "Veuillez entrer un prénom valide"
+    }
+
+    // Message d'erreur Lastname
+
+    console.log(inputLastname.value.length)
+    if (inputLastname.value.length <= 1) {
+        console.log("ERREURlastname")
+        errorLastName.innerHTML = "Veuillez entrer un nom valide"
+    }
+
+    // Message d'erreur Address
+
+    console.log(inputAddress.value.length)
+    if (inputAddress.value.length <= 1) {
+        console.log("ERREURaddress")
+        errorAddress.innerHTML = "Veuillez entrer une adresse valide"
+    }
+
+    // Message d'erreur City
+
+    console.log(inputCity.value.length)
+    if (inputCity.value.length <= 1) {
+        console.log("ERREURcity")
+        errorCity.innerHTML = "Veuillez entrer une ville valide"
+    }
+
+    // Message d'erreur Email
+
+    console.log(inputEmail.value.length)
+    if (inputEmail.value.length <= 1) {
+        console.log("ERREURemail")
+        errorEmail.innerHTML = "Veuillez entrez un email valide"
     }
     return false
 }
 
+// Création des RegExp pour chaque champs : 
 
-// Faire les regexp pour chaque champs
-// Créer un objet contact avec les données du formulaire et un tableaux produits
-// Générer un numéro de commande pour la page confirmation
+const firstNameRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
+let firstName
+console.log(firstNameRegExp)
+
+const lastNameRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
+console.log(lastNameRegExp)
+let lastName
+
+const addressRegExp = /^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
+console.log(addressRegExp)
+let address
+
+const cityRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
+console.log(cityRegExp)
+let city
+
+const emailRegExp = '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$'
+console.log(emailRegExp)
+let email
+
+// Pour le firstname : 
+
+let inputFirstname = document.querySelector("#firstName")
+let errorFirstName = document.querySelector("#firstNameErrorMsg")
+inputFirstname.addEventListener("change", function (e) {
+    firstName = e.target.value
+    if (!firstNameRegExp.test(firstName.value) === true) {
+        errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
+        return
+    }
+    console.log(inputFirstname)
+})
 
 
-/*
-// Si le formulaire est valide : 
-let cart = JSON.parse(localStorage.getItem('cartProduct'));
-let commandProduct = []
-commandProduct.push(cart)
+// Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
-    localStorage.setItem("firstName",document.querySelector("#firstName").value)
-    localStorage.setItem("lastName",document.querySelector("#lastName").value)
-    localStorage.setItem("address",document.querySelector("#address").value)
-    localStorage.setItem("city",document.querySelector("#city").value)
-    localStorage.setItem("email",document.querySelector("#email").value)*/
+/*let command = document.getElementById("order")
+command.addEventListener("click", function (e){
+e.preventDefault()
+})*/
+
+
+
+
+
+
+// Reste à faire : 
+
+    // Pour semaine pro :
+    // Faire les regexp pour chaque champs pour lundi (validation)
+    // Créer un objet contact avec les données du formulaire et un tableaux produits
+    // Générer un numéro de commande pour la page confirmation
+    // product.html : Lorsque l’on ajoute un article au panier il faudrait un message qui indique que l’on vient d’ajouter un article au panier

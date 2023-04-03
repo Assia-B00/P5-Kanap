@@ -48,7 +48,7 @@ buttonCart.addEventListener("click", function () {
 // Message Popup à l'ajout d'un produit 
 
 const popup = () => {
-    if (window.confirm('${product.name} couleur : ${product.colors} a bien été ajouté au panier. Pour consulter le panier cliquez sur "OK". Pour revenir à la liste de produits Kanap cliquez sur "Annuler"')) {
+    if (window.confirm('${name} couleur : ${color} a bien été ajouté au panier. Pour consulter le panier cliquez sur "OK". Pour revenir à la liste de produits Kanap cliquez sur "Annuler"')) {
         window.location.href = "cart.html"
     } else {
         window.location.href = "index.html"
