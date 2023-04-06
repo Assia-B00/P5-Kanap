@@ -355,12 +355,14 @@ commandProducts.addEventListener("click", function (e) {
     }
     console.log(commandProducts)
 
-    const toSend = { products }
-
     // Stocker les informations du formulaire : 
 
+    // dataFormulaire
 
     // Poster les données dans l'API : 
+
+    const toSend = { products , dataFormulaire}
+    console.log(toSend)
 
     let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
         method: "POST",
@@ -378,7 +380,7 @@ commandProducts.addEventListener("click", function (e) {
         try {
             console.log(response)
             const contenu = await response.json()
-            window.location.href = "confirmation.html" + contenu.orderID
+            window.location.href = "./confirmation.html?orderId=" + contenu.orderID
         } catch (e) {
         }
     })
