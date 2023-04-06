@@ -320,24 +320,39 @@ let city
 const emailRegExp = '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$'
 console.log(emailRegExp)
 let email
+*/
 
 // Pour le firstname : 
 
-let inputFirstname = document.querySelector("#firstName")
-let errorFirstName = document.querySelector("#firstNameErrorMsg")
-inputFirstname.addEventListener("change", function (e) {
-    firstName = e.target.value
-    if (!firstNameRegExp.test(firstName.value) === true) {
-        errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
-        return
+function verifRegExp() {
+
+    let inputFirstname = document.querySelector("#firstName")
+    let errorFirstName = document.querySelector("#firstNameErrorMsg")
+
+    // Code de Pierre : 
+
+    const firstNameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
+    if (firstNameRegExp.test(firstName.value) === false) {
+        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
+        console.log(firstNameRegExp)
     }
-    console.log(inputFirstname)
-})
-*/
+
+   /* inputFirstname.addEventListener("change", function (e) {
+        firstName = e.target.value
+        if (!firstNameRegExp.test(firstName.value) === true) {
+            errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
+            return
+        }
+        console.log(inputFirstname)
+    })*/
+}
+
+
+
+
+
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
-
-
 
 let commandProducts = document.getElementById("order")
 commandProducts.addEventListener("click", function (e) {
@@ -361,7 +376,7 @@ commandProducts.addEventListener("click", function (e) {
 
     // Poster les données dans l'API : 
 
-    const toSend = { products , dataFormulaire}
+    const toSend = { products }
     console.log(toSend)
 
     let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
@@ -380,7 +395,7 @@ commandProducts.addEventListener("click", function (e) {
         try {
             console.log(response)
             const contenu = await response.json()
-            window.location.href = "./confirmation.html?orderId=" + contenu.orderID
+            // window.location.href = "./confirmation.html?orderId=" + contenu.orderID
         } catch (e) {
         }
     })
