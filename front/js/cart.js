@@ -234,11 +234,6 @@ function display_total_cart() {
 
 // Formulaire : on utilise les expressions régulières
 
-document.getElementById("order").addEventListener("click", function (e) {
-    e.preventDefault()
-    formulaire()
-})
-
 function formulaire(event) {
     const order = document.querySelector("#order")
 
@@ -298,6 +293,7 @@ function formulaire(event) {
     }
     return false
 }
+
 /*
 // Création des RegExp pour chaque champs : 
 
@@ -337,14 +333,14 @@ function verifRegExp() {
         console.log(firstNameRegExp)
     }
 
-   /* inputFirstname.addEventListener("change", function (e) {
-        firstName = e.target.value
-        if (!firstNameRegExp.test(firstName.value) === true) {
-            errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
-            return
-        }
-        console.log(inputFirstname)
-    })*/
+    /* inputFirstname.addEventListener("change", function (e) {
+         firstName = e.target.value
+         if (!firstNameRegExp.test(firstName.value) === true) {
+             errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
+             return
+         }
+         console.log(inputFirstname)
+     })*/
 }
 
 
@@ -354,53 +350,80 @@ function verifRegExp() {
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
-let commandProducts = document.getElementById("order")
-commandProducts.addEventListener("click", function (e) {
-    e.preventDefault()
+function validCommand() {
 
-    // Stocker les id des produits du panier dans un tableau products : 
+    let commandProducts = document.getElementById("order")
+    commandProducts.addEventListener("click", function (e) {
+        e.preventDefault()
 
-    const idCommand = document.querySelectorAll(".cart__item")
+        // Stocker les id des produits du panier dans un tableau products : 
 
-    let products = []
+        const idCommand = document.querySelectorAll(".cart__item")
 
-    for (let i = 0; i < idCommand.length; i++) {
-        const productIdCommand = idCommand[i].getAttribute("data-id")
-        products.push(productIdCommand)
-    }
-    console.log(commandProducts)
+        let products = []
 
-    // Stocker les informations du formulaire : 
-
-    // dataFormulaire
-
-    // Poster les données dans l'API : 
-
-    const toSend = { products }
-    console.log(toSend)
-
-    let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
-        method: "POST",
-        body: JSON.stringify(toSend),
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
+        for (let i = 0; i < idCommand.length; i++) {
+            const productIdCommand = idCommand[i].getAttribute("data-id")
+            products.push(productIdCommand)
         }
+        console.log(commandProducts)
 
-    })
-
-    // Génération d'un orderID retourné par l'API et renvoie vers la page de confirmation :
-
-    sendCommandToApi.then(async (response) => {
-        try {
-            console.log(response)
-            const contenu = await response.json()
-            // window.location.href = "./confirmation.html?orderId=" + contenu.orderID
-        } catch (e) {
+        /*
+        {
+            "contact": {
+                "firstName": "Alan",
+                "lastName": "Turing",
+                "address": "6, boulevard Enigma",
+                "city": "world wide",
+                "email": "a.turing@mathematics.co.uk"
+            },
+            "products": [
+                "107fb5b75607497b96722bda5b504926",
+                "034707184e8e4eefb46400b5a3774b5f"
+            ]
         }
+        */
+        // Stocker les informations du formulaire : 
+
+        // dataFormulaire
+
+        // Poster les données dans l'API : 
+
+        const toSend = {
+            "contact": {
+                "firstName": "Alan",
+                "lastName": "Turing",
+                "address": "6, boulevard Enigma",
+                "city": "world wide",
+                "email": "a.turing@mathematics.co.uk"
+            },
+            "products": products
+        }
+        console.log(toSend)
+
+        let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            body: JSON.stringify(toSend),
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+
+        })
+
+        // Génération d'un orderID retourné par l'API et renvoie vers la page de confirmation :
+
+        sendCommandToApi.then(async (response) => {
+            try {
+
+                const contenu = await response.json()
+                console.log(contenu.orderId)
+                window.location.href = "./confirmation.html?orderId=" + contenu.orderId
+            } catch (e) {
+            }
+        })
     })
-    orderIDconfirm()
-})
+}
 
 
 

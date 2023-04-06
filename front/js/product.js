@@ -36,33 +36,32 @@ fetch("http://localhost:3000/api/products/" + product_id)
 
 const buttonCart = document.querySelector("#addToCart")
 buttonCart.addEventListener("click", function () {
-    //TODO: Vérifier les données (quantié et couleur) 
+
     const quantity = document.querySelector("#quantity").value
     const color = document.querySelector("#colors").value
     const price = document.querySelector("#price").value
+
+    // Message d'alerte si la couleur et la quantité n'ont pas été renseignées 
+    if (!color) {
+        alert("Vous devez sélectionner une couleur")
+        return
+    }
+    if (quantity == null || quantity < 1 || quantity > 100) {
+        alert("Vous devez choisir une quantité entre 1 et 100")
+        return
+    }
+
     // product_id
     addToCart(product_id, color, quantity)
     //infoQuantityColor ()
-    popup()
+    popup(color)
 })
-
-// Message d'alerte si la couleur et la quantité n'ont pas été renseignées 
-
-function infoQuantityColor () {
-    if (!color){
-        alert ("Vous devez sélectionner une couleur")
-        return
-    }
-    if (quantity == null && quantity < 1 && quantity > 100){
-        alert ("Vous devez choisir une quantité entre 1 et 100")
-        return
-    }
-}
 
 // Message Popup à l'ajout d'un produit 
 
-const popup = () => {
-    if (window.confirm('${name} couleur : ${color} a bien été ajouté au panier. Pour consulter le panier cliquez sur "OK". Pour revenir à la liste de produits Kanap cliquez sur "Annuler"')) {
+const popup = (color) => {
+    const name = document.getElementById("title").innerHTML;
+    if (window.confirm(`Le ${name} de couleur ${color} a bien été ajouté au panier. Pour consulter le panier cliquez sur "OK". Pour revenir à la liste de produits Kanap cliquez sur "Annuler"`)) {
         window.location.href = "cart.html"
     } else {
         window.location.href = "index.html"
