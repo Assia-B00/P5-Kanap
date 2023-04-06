@@ -235,6 +235,9 @@ function display_total_cart() {
 // Formulaire : on utilise les expressions régulières
 
 function formulaire(event) {
+
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$','g')
+    let valid = true
     const order = document.querySelector("#order")
 
     let inputFirstname = document.querySelector("#firstName")
@@ -258,6 +261,12 @@ function formulaire(event) {
     if (inputFirstname.value.length <= 1) {
         console.log("ERREURfirstname")
         errorFirstName.innerHTML = "Veuillez entrer un prénom valide"
+        valid = false
+    }
+
+    if (nameRegExp.test(firstName.value) === false) {
+        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"  
+        valid = false     
     }
 
     // Message d'erreur Lastname
@@ -266,6 +275,12 @@ function formulaire(event) {
     if (inputLastname.value.length <= 1) {
         console.log("ERREURlastname")
         errorLastName.innerHTML = "Veuillez entrer un nom valide"
+        valid = false
+    }
+         
+    if (nameRegExp.test(lastName.value) === false) {
+        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"  
+        valid = false     
     }
 
     // Message d'erreur Address
@@ -274,6 +289,7 @@ function formulaire(event) {
     if (inputAddress.value.length <= 1) {
         console.log("ERREURaddress")
         errorAddress.innerHTML = "Veuillez entrer une adresse valide"
+        valid = false
     }
 
     // Message d'erreur City
@@ -282,6 +298,7 @@ function formulaire(event) {
     if (inputCity.value.length <= 1) {
         console.log("ERREURcity")
         errorCity.innerHTML = "Veuillez entrer une ville valide"
+        valid = false
     }
 
     // Message d'erreur Email
@@ -290,8 +307,9 @@ function formulaire(event) {
     if (inputEmail.value.length <= 1) {
         console.log("ERREURemail")
         errorEmail.innerHTML = "Veuillez entrez un email valide"
+        valid = false
     }
-    return false
+    return valid
 }
 
 /*
@@ -332,15 +350,7 @@ function verifRegExp() {
         errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
         console.log(firstNameRegExp)
     }
-
-    /* inputFirstname.addEventListener("change", function (e) {
-         firstName = e.target.value
-         if (!firstNameRegExp.test(firstName.value) === true) {
-             errorFirstName = "Veuillez entrer des lettres pour renseigner le prénom"
-             return
-         }
-         console.log(inputFirstname)
-     })*/
+    return false
 }
 
 
@@ -356,6 +366,8 @@ function validCommand() {
     commandProducts.addEventListener("click", function (e) {
         e.preventDefault()
 
+        formulaire()
+
         // Stocker les id des produits du panier dans un tableau products : 
 
         const idCommand = document.querySelectorAll(".cart__item")
@@ -368,34 +380,13 @@ function validCommand() {
         }
         console.log(commandProducts)
 
-        /*
-        {
-            "contact": {
-                "firstName": "Alan",
-                "lastName": "Turing",
-                "address": "6, boulevard Enigma",
-                "city": "world wide",
-                "email": "a.turing@mathematics.co.uk"
-            },
-            "products": [
-                "107fb5b75607497b96722bda5b504926",
-                "034707184e8e4eefb46400b5a3774b5f"
-            ]
-        }
-        */
-        // Stocker les informations du formulaire : 
-
-        // dataFormulaire
-
-        // Poster les données dans l'API : 
-
         const toSend = {
             "contact": {
-                "firstName": "Alan",
-                "lastName": "Turing",
-                "address": "6, boulevard Enigma",
-                "city": "world wide",
-                "email": "a.turing@mathematics.co.uk"
+                "firstName": document.querySelector("#firstName").value,
+                "lastName": document.querySelector("#lastName").value,
+                "address": document.querySelector("#address").value,
+                "city": document.querySelector("#city").value,
+                "email": document.querySelector("#email").value
             },
             "products": products
         }
@@ -418,23 +409,9 @@ function validCommand() {
 
                 const contenu = await response.json()
                 console.log(contenu.orderId)
-                window.location.href = "./confirmation.html?orderId=" + contenu.orderId
+                //window.location.href = "./confirmation.html?orderId=" + contenu.orderId
             } catch (e) {
             }
         })
     })
 }
-
-
-
-
-
-
-
-
-// Reste à faire : 
-
-    // Faire les regexp pour chaque champs pour lundi (validation)
-    // Créer un objet contact avec les données du formulaire et un tableaux produits
-    // Générer un numéro de commande pour la page confirmation
-    // product.html : Lorsque l’on ajoute un article au panier il faudrait un message qui indique que l’on vient d’ajouter un article au panier
