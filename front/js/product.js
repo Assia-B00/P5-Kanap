@@ -42,8 +42,21 @@ buttonCart.addEventListener("click", function () {
     const price = document.querySelector("#price").value
     // product_id
     addToCart(product_id, color, quantity)
+    //infoQuantityColor ()
     popup()
 })
+
+// Message d'alerte si la couleur et la quantité n'ont pas été renseignées 
+
+function infoQuantityColor () {
+    if (!color){
+        alert ("Vous devez sélectionner une couleur")
+        return
+    }
+    if (!quantity){
+        alert ("Vous devez choisir une quantité entre 1 et 100")
+    }
+}
 
 // Message Popup à l'ajout d'un produit 
 
