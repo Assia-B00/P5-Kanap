@@ -171,7 +171,8 @@ function modifyQuantity() {
 }
 
 
-// La fonction pour gérer la suppression :
+// La fonction pour gérer la suppression d'un article :
+
 function deleteProduct() {
 
     let ancestor = this.closest(".cart__item");
@@ -210,6 +211,7 @@ function display_total_cart() {
 
     // Si le panier n'est pas vide : afficher les produits du local storage
     // Pour parcourir le panier, on fait une boucle for 
+
     let totalPrice = 0;
     for (let i = 0; i < cart.length; i++) {
         fetch("http://localhost:3000/api/products/" + cart[i].id)
@@ -304,7 +306,7 @@ function formulaire(event) {
     }
     return false
 }
-
+/*
 // Création des RegExp pour chaque champs : 
 
 const firstNameRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
@@ -339,14 +341,59 @@ inputFirstname.addEventListener("change", function (e) {
     }
     console.log(inputFirstname)
 })
-
+*/
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
-/*let command = document.getElementById("order")
-command.addEventListener("click", function (e){
-e.preventDefault()
-})*/
+
+
+let commandProducts = document.getElementById("order")
+commandProducts.addEventListener("click", function (e) {
+    e.preventDefault()
+
+    // Stocker les id des produits du panier dans un tableau products : 
+
+    const idCommand = document.querySelectorAll(".cart__item")
+
+    let products = []
+
+    for (let i = 0; i < idCommand.length; i++) {
+        const productIdCommand = idCommand[i].getAttribute("data-id")
+        products.push(productIdCommand)
+    }
+    console.log(commandProducts)
+
+    const toSend = { products }
+
+    // Stocker les informations du formulaire : 
+
+
+    // Poster les données dans l'API : 
+
+    let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        body: JSON.stringify(toSend),
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+
+    })
+
+    // Génération d'un orderID retourné par l'API et renvoie vers la page de confirmation :
+
+    sendCommandToApi.then(async (response) => {
+        try {
+            console.log(response)
+            const contenu = await response.json()
+            window.location.href = "confirmation.html" + contenu.orderID
+        } catch (e) {
+        }
+    })
+    orderIDconfirm()
+})
+
+
 
 
 
@@ -355,7 +402,6 @@ e.preventDefault()
 
 // Reste à faire : 
 
-    // Pour semaine pro :
     // Faire les regexp pour chaque champs pour lundi (validation)
     // Créer un objet contact avec les données du formulaire et un tableaux produits
     // Générer un numéro de commande pour la page confirmation
