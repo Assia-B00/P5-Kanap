@@ -53,8 +53,9 @@ function infoQuantityColor () {
         alert ("Vous devez sélectionner une couleur")
         return
     }
-    if (!quantity){
+    if (quantity == null && quantity < 1 && quantity > 100){
         alert ("Vous devez choisir une quantité entre 1 et 100")
+        return
     }
 }
 

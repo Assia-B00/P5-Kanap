@@ -135,11 +135,9 @@ function get_cart() {
                 cartChoice.appendChild(btnDelete)
                 cart_content.appendChild(cartChoice)
 
-                // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction get_total_cart
-
+                // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction display_total_cart ()
 
             })
-
     }
     display_total_cart()
 }
@@ -209,9 +207,6 @@ function display_total_cart() {
         return
     }
 
-    // Si le panier n'est pas vide : afficher les produits du local storage
-    // Pour parcourir le panier, on fait une boucle for 
-
     let totalPrice = 0;
     for (let i = 0; i < cart.length; i++) {
         fetch("http://localhost:3000/api/products/" + cart[i].id)
@@ -222,10 +217,7 @@ function display_total_cart() {
             })
             .then(function (product) {
 
-
                 totalPrice += product.price * cart[i].quantity
-
-                // Le nombre total d'articles et le prix total ont été déplacé plus bas dans la fonction get_total_cart
 
                 // Pour afficher le nombre total d'articles :
                 document.getElementById("totalQuantity").innerHTML = cart.length
