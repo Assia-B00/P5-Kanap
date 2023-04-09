@@ -313,7 +313,7 @@ function formulaire(event) {
         valid = false     
     }
 
-    return false
+    return valid
 }
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
@@ -362,7 +362,6 @@ function validCommand() {
 
         sendCommandToApi.then(async (response) => {
             try {
-
                 const contenu = await response.json()
                 window.location.href = "./confirmation.html?orderId=" + contenu.orderId
             } catch (e) {
