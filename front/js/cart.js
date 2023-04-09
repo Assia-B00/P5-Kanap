@@ -233,9 +233,9 @@ function formulaire(event) {
     let valid = true
     //const order = document.querySelector("#order")
 
-    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$','g')
-    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/) 
-    const emailRegExp = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
+    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/)
+    const emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
 
 
     let inputFirstname = document.querySelector("#firstName")
@@ -261,8 +261,8 @@ function formulaire(event) {
     }
 
     if (nameRegExp.test(firstName.value) === false) {
-        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"  
-        valid = false     
+        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
+        valid = false
     }
 
     // Message d'erreur Lastname
@@ -271,10 +271,10 @@ function formulaire(event) {
         errorLastName.innerHTML = "Veuillez entrer un nom valide"
         valid = false
     }
-         
+
     if (nameRegExp.test(lastName.value) === false) {
-        errorLastName.innerHTML = "Veuillez entrer des lettres pour renseigner le nom"  
-        valid = false     
+        errorLastName.innerHTML = "Veuillez entrer des lettres pour renseigner le nom"
+        valid = false
     }
 
     // Message d'erreur Address
@@ -285,8 +285,8 @@ function formulaire(event) {
     }
 
     if (addressRegExp.test(address.value) === false) {
-        errorAddress.innerHTML = "Adresse non validée"  
-        valid = false     
+        errorAddress.innerHTML = "Adresse non validée"
+        valid = false
     }
 
     // Message d'erreur City
@@ -297,8 +297,8 @@ function formulaire(event) {
     }
 
     if (nameRegExp.test(city.value) === false) {
-        errorCity.innerHTML = "Veuillez entrer une ville connue"  
-        valid = false     
+        errorCity.innerHTML = "Veuillez entrer une ville connue"
+        valid = false
     }
 
     // Message d'erreur Email
@@ -309,12 +309,32 @@ function formulaire(event) {
     }
 
     if (emailRegExp.test(email.value) === false) {
-        errorEmail.innerHTML = "L'adresse mail est incorrecte"  
-        valid = false     
+        errorEmail.innerHTML = "L'adresse mail est incorrecte"
+        valid = false
     }
 
     return valid
 }
+
+/*function verifRegExp() {
+
+    let inputFirstname = document.querySelector("#firstName")
+    let errorFirstName = document.querySelector("#firstNameErrorMsg")
+
+    // Code de Pierre : 
+
+    const firstNameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
+    if (firstNameRegExp.test(firstName.value) === false) {
+        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
+        console.log(firstNameRegExp)
+        if (emailRegExp.test(email.value) === false) {
+            errorEmail.innerHTML = "L'adresse mail est incorrecte"
+            valid = false
+        }
+
+        return false
+    }
+}*/
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
@@ -326,7 +346,7 @@ function validCommand() {
 
         formulaire()
 
-        // Stocker les id des produits du panier dans un tableau products : 
+        // Stocker les id des produits du panier et les données du formulaire dans un tableau products : 
 
         const idCommand = document.querySelectorAll(".cart__item")
 
