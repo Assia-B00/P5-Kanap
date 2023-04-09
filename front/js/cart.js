@@ -1,22 +1,19 @@
 function addToCart(product_id, color, quantity) {
     let data = { "id": product_id, "color": color, "quantity": quantity }
     let cart = JSON.parse(localStorage.getItem('cartProduct'));
-    //let cart = [];
+
     if (!cart) {
         cart = [];
         cart.push(data);
         localStorage.setItem('cartProduct', JSON.stringify(cart));
-        console.log("INIT CART")
         return
     }
 
     // S'il y a dèjà des produits enregistrés dans le localstorage
     let to_add = true
-    console.log(cart)
-    for (let i = 0; i < cart.length; i++) {
-        console.log(cart[i]['id'])
-        if (cart[i]['id'] == product_id && cart[i]['color'] == color) {
-            cart[i]['quantity'] = parseInt(cart[i]['quantity']) + parseInt(quantity)
+    for (const element of cart) {
+        if (element['id'] == product_id && element['color'] == color) {
+            element['quantity'] = parseInt(element['quantity']) + parseInt(quantity)
             to_add = false
             break
         }
@@ -26,7 +23,6 @@ function addToCart(product_id, color, quantity) {
     }
 
     localStorage.setItem('cartProduct', JSON.stringify(cart));
-    console.log(cart);
 }
 
 // Affichage du panier avec les données des produits dans le tableau
@@ -41,8 +37,8 @@ function get_cart() {
 
     // Si le panier n'est pas vide : afficher les produits du local storage
     // Pour parcourir le panier, on fait une boucle for 
-    for (let i = 0; i < cart.length; i++) {
-        fetch("http://localhost:3000/api/products/" + cart[i].id)
+    for (const element of cart) {
+        fetch("http://localhost:3000/api/products/" + element.id)
             .then(function (response) {
                 if (response.ok) {
                     return response.json();
@@ -56,7 +52,7 @@ function get_cart() {
                 let seeCart = document.createElement("article")
                 seeCart.classList.add("cart__item")
                 seeCart.setAttribute("data-id", product["_id"])
-                seeCart.setAttribute("data-color", cart[i]["color"])
+                seeCart.setAttribute("data-color", element["color"])
                 section.appendChild(seeCart)
 
                 // Pour afficher l'image du produit :
@@ -85,7 +81,7 @@ function get_cart() {
 
                 // Pour afficher la couleur du produit : 
                 let color = document.createElement("p")
-                color.innerHTML = cart[i].color;
+                color.innerHTML = element.color;
                 cartDescription.appendChild(color)
 
                 // Pour afficher le prix total du produit :
@@ -115,7 +111,7 @@ function get_cart() {
                 inputQuantity.setAttribute("name", "itemQuantity")
                 inputQuantity.setAttribute("min", "1")
                 inputQuantity.setAttribute("max", "100")
-                inputQuantity.setAttribute("value", cart[i].quantity)
+                inputQuantity.setAttribute("value", element.quantity)
                 inputQuantity.classList.add("itemQuantity")
                 inputQuantity.addEventListener("click", modifyQuantity)
 
@@ -145,8 +141,6 @@ function get_cart() {
 // Pour modifier la quantité d'un produit sur la page panier (méthode -> addEventListener de type change) :
 
 function modifyQuantity() {
-    console.log("modifyQuantity")
-    console.log(this.value)
 
     let newQuantity = parseInt(this.value)
     let ancestor = this.closest(".cart__item");
@@ -154,12 +148,12 @@ function modifyQuantity() {
     const color = ancestor.getAttribute("data-color");
     let cart = JSON.parse(localStorage.getItem('cartProduct'));
 
-    for (let index = 0; index < cart.length; index++) {
+    for (const element of cart) {
         if (
-            cart[index].id === id &&
-            cart[index].color === color
+            element.id === id &&
+            element.color === color
         ) {
-            cart[index].quantity = newQuantity
+            element.quantity = newQuantity
             localStorage.setItem('cartProduct', JSON.stringify(cart));
             break;
         }
@@ -208,8 +202,8 @@ function display_total_cart() {
     }
 
     let totalPrice = 0;
-    for (let i = 0; i < cart.length; i++) {
-        fetch("http://localhost:3000/api/products/" + cart[i].id)
+    for (const element of cart) {
+        fetch("http://localhost:3000/api/products/" + element.id)
             .then(function (response) {
                 if (response.ok) {
                     return response.json();
@@ -217,7 +211,7 @@ function display_total_cart() {
             })
             .then(function (product) {
 
-                totalPrice += product.price * cart[i].quantity
+                totalPrice += product.price * element.quantity
 
                 // Pour afficher le nombre total d'articles :
                 document.getElementById("totalQuantity").innerHTML = cart.length
@@ -236,9 +230,13 @@ function display_total_cart() {
 
 function formulaire(event) {
 
-    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$','g')
     let valid = true
-    const order = document.querySelector("#order")
+    //const order = document.querySelector("#order")
+
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$','g')
+    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/) 
+    const emailRegExp = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
+
 
     let inputFirstname = document.querySelector("#firstName")
     let errorFirstName = document.querySelector("#firstNameErrorMsg")
@@ -257,9 +255,7 @@ function formulaire(event) {
 
     // Message d'erreur Fristname
 
-    console.log(inputFirstname.value.length)
     if (inputFirstname.value.length <= 1) {
-        console.log("ERREURfirstname")
         errorFirstName.innerHTML = "Veuillez entrer un prénom valide"
         valid = false
     }
@@ -271,92 +267,54 @@ function formulaire(event) {
 
     // Message d'erreur Lastname
 
-    console.log(inputLastname.value.length)
     if (inputLastname.value.length <= 1) {
-        console.log("ERREURlastname")
         errorLastName.innerHTML = "Veuillez entrer un nom valide"
         valid = false
     }
          
     if (nameRegExp.test(lastName.value) === false) {
-        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"  
+        errorLastName.innerHTML = "Veuillez entrer des lettres pour renseigner le nom"  
         valid = false     
     }
 
     // Message d'erreur Address
 
-    console.log(inputAddress.value.length)
     if (inputAddress.value.length <= 1) {
-        console.log("ERREURaddress")
         errorAddress.innerHTML = "Veuillez entrer une adresse valide"
         valid = false
     }
 
+    if (addressRegExp.test(address.value) === false) {
+        errorAddress.innerHTML = "Adresse non validée"  
+        valid = false     
+    }
+
     // Message d'erreur City
 
-    console.log(inputCity.value.length)
     if (inputCity.value.length <= 1) {
-        console.log("ERREURcity")
         errorCity.innerHTML = "Veuillez entrer une ville valide"
         valid = false
     }
 
+    if (nameRegExp.test(city.value) === false) {
+        errorCity.innerHTML = "Veuillez entrer une ville connue"  
+        valid = false     
+    }
+
     // Message d'erreur Email
 
-    console.log(inputEmail.value.length)
     if (inputEmail.value.length <= 1) {
-        console.log("ERREURemail")
         errorEmail.innerHTML = "Veuillez entrez un email valide"
         valid = false
     }
-    return valid
-}
 
-/*
-// Création des RegExp pour chaque champs : 
-
-const firstNameRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
-let firstName
-console.log(firstNameRegExp)
-
-const lastNameRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
-console.log(lastNameRegExp)
-let lastName
-
-const addressRegExp = /^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
-console.log(addressRegExp)
-let address
-
-const cityRegExp = /^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/
-console.log(cityRegExp)
-let city
-
-const emailRegExp = '^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$'
-console.log(emailRegExp)
-let email
-*/
-
-// Pour le firstname : 
-
-function verifRegExp() {
-
-    let inputFirstname = document.querySelector("#firstName")
-    let errorFirstName = document.querySelector("#firstNameErrorMsg")
-
-    // Code de Pierre : 
-
-    const firstNameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
-    if (firstNameRegExp.test(firstName.value) === false) {
-        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
-        console.log(firstNameRegExp)
+    if (emailRegExp.test(email.value) === false) {
+        errorEmail.innerHTML = "L'adresse mail est incorrecte"  
+        valid = false     
     }
+
     return false
 }
-
-
-
-
-
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
@@ -374,11 +332,10 @@ function validCommand() {
 
         let products = []
 
-        for (let i = 0; i < idCommand.length; i++) {
-            const productIdCommand = idCommand[i].getAttribute("data-id")
+        for (const element of idCommand) {
+            const productIdCommand = element.getAttribute("data-id")
             products.push(productIdCommand)
         }
-        console.log(commandProducts)
 
         const toSend = {
             "contact": {
@@ -390,7 +347,6 @@ function validCommand() {
             },
             "products": products
         }
-        console.log(toSend)
 
         let sendCommandToApi = fetch("http://localhost:3000/api/products/order", {
             method: "POST",
@@ -408,8 +364,7 @@ function validCommand() {
             try {
 
                 const contenu = await response.json()
-                console.log(contenu.orderId)
-                //window.location.href = "./confirmation.html?orderId=" + contenu.orderId
+                window.location.href = "./confirmation.html?orderId=" + contenu.orderId
             } catch (e) {
             }
         })

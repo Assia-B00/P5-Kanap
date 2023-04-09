@@ -5,7 +5,6 @@ fetch("http://localhost:3000/api/products/" + product_id)
         }
     })
     .then(function (product) {
-        console.log(product)
 
         // Image
         let img = document.createElement("img")
@@ -24,7 +23,6 @@ fetch("http://localhost:3000/api/products/" + product_id)
 
         // Colors       
         for (let color of product["colors"]) {
-            console.log(color)
             let option = document.createElement("option")
             option.setAttribute("value", color)
             option.innerHTML = color
@@ -39,7 +37,6 @@ buttonCart.addEventListener("click", function () {
 
     const quantity = document.querySelector("#quantity").value
     const color = document.querySelector("#colors").value
-    const price = document.querySelector("#price").value
 
     // Message d'alerte si la couleur et la quantité n'ont pas été renseignées 
     if (!color) {
