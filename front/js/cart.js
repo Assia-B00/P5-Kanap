@@ -202,6 +202,7 @@ function display_total_cart() {
     }
 
     let totalPrice = 0;
+    let totalQuantity = 0;
     for (const element of cart) {
         fetch("http://localhost:3000/api/products/" + element.id)
             .then(function (response) {
@@ -211,10 +212,10 @@ function display_total_cart() {
             })
             .then(function (product) {
 
-                totalPrice += product.price * element.quantity
-
+                totalPrice += product.price * element.quantity;
+                totalQuantity += parseInt(element.quantity);
                 // Pour afficher le nombre total d'articles :
-                document.getElementById("totalQuantity").innerHTML = cart.length
+                document.getElementById("totalQuantity").innerHTML = totalQuantity
 
                 // Pour afficher le prix TOTAL du panier : 
                 document.getElementById("totalPrice").innerHTML = parseFloat(totalPrice).toFixed(2)
@@ -228,38 +229,34 @@ function display_total_cart() {
 
 // Formulaire : on utilise les expressions régulières
 
-// - Effacer toutes les erreurs avant validation
-// - Enlever l'option 'g' pour les noms
-// - "Bernard de la Villardière" devrait fonctionner
-// - "10, rue de la Muse" devrait fonctionner
-// - "Enghien les bains" devrait fonctionner
-// - Après commande, effacer panier mais pas les informations user (ligne 379)
-// - Mettre numéro de commande en milieu de page
-// Revoir total articles
-
 function formulaire(event) {
 
     let valid = true
     //const order = document.querySelector("#order")
 
-    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ-]+$')
-    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ-]+$/)
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ -]+$')
+    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ ,.\s-]+$/)
     const emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
 
     let inputFirstname = document.querySelector("#firstName")
     let errorFirstName = document.querySelector("#firstNameErrorMsg")
+    errorFirstName.innerHTML = "";
 
     let inputLastname = document.querySelector("#lastName")
     let errorLastName = document.querySelector("#lastNameErrorMsg")
+    errorLastName.innerHTML = "";
 
     let inputAddress = document.querySelector("#address")
     let errorAddress = document.querySelector("#addressErrorMsg")
+    errorAddress.innerHTML = "";
 
     let inputCity = document.querySelector("#city")
     let errorCity = document.querySelector("#cityErrorMsg")
+    errorCity.innerHTML = "";
 
     let inputEmail = document.querySelector("#email")
     let errorEmail = document.querySelector("#emailErrorMsg")
+    errorEmail.innerHTML = "";
 
     // Message d'erreur Fristname
 
@@ -332,7 +329,9 @@ function validCommand() {
     commandProducts.addEventListener("click", function (e) {
         e.preventDefault()
 
-        formulaire()
+        if (!formulaire()) {
+            return false;
+        }
 
         // Stocker les id des produits du panier et les données du formulaire dans un tableau products : 
 
@@ -371,18 +370,14 @@ function validCommand() {
         sendCommandToApi.then(async (response) => {
             try {
                 const contenu = await response.json()
-                window.location.href = "./confirmation.html?orderId=" + contenu.orderId
+                window.location.href = "./confirmation.html?orderId=" + contenu.orderId + "#orderId"
             } catch (e) {
             }
         })
 
         // Pour vider le panier après validation du panier 
 
-        const emptyCart = document.getElementById("order")
-        emptyCart.addEventListener("click", () => {
-            localStorage.clear(products)
-            console.log("emptyCart")
-        })
+        localStorage.clear(products)
 
     })
 }
