@@ -228,21 +228,23 @@ function display_total_cart() {
 
 // Formulaire : on utilise les expressions régulières
 
-// - effacer toutes les erreurs avant validation
-// - enlever l'option 'g' pour les noms
+// - Effacer toutes les erreurs avant validation
+// - Enlever l'option 'g' pour les noms
 // - "Bernard de la Villardière" devrait fonctionner
 // - "10, rue de la Muse" devrait fonctionner
 // - "Enghien les bains" devrait fonctionner
+// - Après commande, effacer panier mais pas les informations user (ligne 379)
+// - Mettre numéro de commande en milieu de page
+// Revoir total articles
 
 function formulaire(event) {
 
     let valid = true
     //const order = document.querySelector("#order")
 
-    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$')
-    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/)
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ-]+$')
+    const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ-]+$/)
     const emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
-
 
     let inputFirstname = document.querySelector("#firstName")
     let errorFirstName = document.querySelector("#firstNameErrorMsg")
@@ -373,5 +375,14 @@ function validCommand() {
             } catch (e) {
             }
         })
+
+        // Pour vider le panier après validation du panier 
+
+        const emptyCart = document.getElementById("order")
+        emptyCart.addEventListener("click", () => {
+            localStorage.clear(products)
+            console.log("emptyCart")
+        })
+
     })
 }
