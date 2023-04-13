@@ -228,12 +228,18 @@ function display_total_cart() {
 
 // Formulaire : on utilise les expressions régulières
 
+// - effacer toutes les erreurs avant validation
+// - enlever l'option 'g' pour les noms
+// - "Bernard de la Villardière" devrait fonctionner
+// - "10, rue de la Muse" devrait fonctionner
+// - "Enghien les bains" devrait fonctionner
+
 function formulaire(event) {
 
     let valid = true
     //const order = document.querySelector("#order")
 
-    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
+    const nameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$')
     const addressRegExp = new RegExp(/^[a-zA-Z0-9éèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$/)
     const emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$')
 
@@ -315,26 +321,6 @@ function formulaire(event) {
 
     return valid
 }
-
-/*function verifRegExp() {
-
-    let inputFirstname = document.querySelector("#firstName")
-    let errorFirstName = document.querySelector("#firstNameErrorMsg")
-
-    // Code de Pierre : 
-
-    const firstNameRegExp = new RegExp('^[a-zA-ZéèêëàâäôöîïùûüçÉÈÊËÀÂÄÔÖÎÏÙÛÜÇ\s-]+$', 'g')
-    if (firstNameRegExp.test(firstName.value) === false) {
-        errorFirstName.innerHTML = "Veuillez entrer des lettres pour renseigner le prénom"
-        console.log(firstNameRegExp)
-        if (emailRegExp.test(email.value) === false) {
-            errorEmail.innerHTML = "L'adresse mail est incorrecte"
-            valid = false
-        }
-
-        return false
-    }
-}*/
 
 // Créer un objet contact à partir des données du formulaire et un tableau de produits : 
 
