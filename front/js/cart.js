@@ -2,6 +2,8 @@ function addToCart(product_id, color, quantity) {
     let data = { "id": product_id, "color": color, "quantity": quantity }
     let cart = JSON.parse(localStorage.getItem('cartProduct'));
 
+    // S'il n'y a pas des produits déjà présents dans le localstorage 
+
     if (!cart) {
         cart = [];
         cart.push(data);
@@ -37,6 +39,7 @@ function get_cart() {
 
     // Si le panier n'est pas vide : afficher les produits du local storage
     // Pour parcourir le panier, on fait une boucle for 
+
     for (const element of cart) {
         fetch("http://localhost:3000/api/products/" + element.id)
             .then(function (response) {
