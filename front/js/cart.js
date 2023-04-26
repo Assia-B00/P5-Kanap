@@ -1,3 +1,8 @@
+get_cart()
+validCommand()
+
+// Fonction du bouton "Ajouter au panier"
+
 function addToCart(product_id, color, quantity) {
     let data = { "id": product_id, "color": color, "quantity": quantity }
     let cart = JSON.parse(localStorage.getItem('cartProduct'));

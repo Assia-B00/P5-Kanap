@@ -1,3 +1,9 @@
+// Méthode URL search Params 
+
+const url = new URL(document.location);
+const product_id = url.searchParams.get("id");
+
+
 fetch("http://localhost:3000/api/products/" + product_id)
     .then(function (response) {
         if (response.ok) {
